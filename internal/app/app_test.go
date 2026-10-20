@@ -43,12 +43,29 @@ func TestRunVersionJSONReportsBuildAndCompatibility(t *testing.T) {
 	}
 }
 
-func TestRunKnownUnimplementedCommandReturnsUsageCode(t *testing.T) {
+func TestRunValidateAndInspectExample(t *testing.T) {
 	var stdout, stderr bytes.Buffer
-	if code := Run(context.Background(), []string{"serve", "--config", "gateway.yaml"}, &stdout, &stderr); code != 2 {
-		t.Fatalf("Run(serve) code = %d, want 2", code)
+	configPath := "../../examples/gateway.yaml"
+	if code := Run(context.Background(), []string{"validate", "--config", configPath}, &stdout, &stderr); code != 0 {
+		t.Fatalf("Run(validate) code = %d stderr=%s", code, stderr.String())
 	}
-	if got := stderr.String(); got != "serve is not implemented\n" {
-		t.Fatalf("stderr = %q", got)
+	if !strings.Contains(stdout.String(), `"valid":true`) || !strings.Contains(stdout.String(), `"online":false`) {
+		t.Fatalf("validate output=%s", stdout.String())
+	}
+	stdout.Reset()
+	stderr.Reset()
+	if code := Run(context.Background(), []string{"inspect", "--config", configPath, "--format", "json"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("Run(inspect) code=%d stderr=%s", code, stderr.String())
+	}
+	if !strings.Contains(stdout.String(), `"exports"`) || strings.Contains(stdout.String(), "downstream-example") {
+		t.Fatalf("unsafe inspect output=%s", stdout.String())
+	}
+	stdout.Reset()
+	stderr.Reset()
+	if code := Run(context.Background(), []string{"serve"}, &stdout, &stderr); code != 2 {
+		t.Fatalf("serve without config code=%d", code)
+	}
+	if !strings.Contains(stderr.String(), "--config") {
+		t.Fatalf("serve stderr=%q", stderr.String())
 	}
 }
