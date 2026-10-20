@@ -1,0 +1,12 @@
+POST /mcp/engineering HTTP/1.1
+Host: mcp.example.com
+Content-Type: application/json
+Accept: application/json, text/event-stream
+Authorization: Bearer downstream-example
+MCP-Protocol-Version: 2026-07-28
+MCP-Client-Name: fixture-agent
+MCP-Client-Version: 1.0.0
+MCP-Name: users.get_user
+
+{"jsonrpc":"2.0","id":"req-1","method":"tools/call","params":{"name":"users.get_user","arguments":{"path":{"user_id":"u_123"}},"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"fixture-agent","version":"1.0.0"},"io.modelcontextprotocol/clientCapabilities":{}}}}
+

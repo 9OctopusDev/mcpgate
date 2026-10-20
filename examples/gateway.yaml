@@ -1,0 +1,163 @@
+api_version: mcpgate/v1
+
+gateway:
+  name: universal-mcp
+  data:
+    listen: "127.0.0.1:8080"
+    allowed_hosts: ["mcp.example.com", "localhost:8080"]
+    allowed_origins: ["https://console.example.com"]
+    allow_missing_origin: true
+  admin:
+    listen: "127.0.0.1:9090"
+  limits:
+    max_inflight: 256
+    max_queued: 64
+    queue_timeout: 250ms
+    call_timeout: 30s
+    request_bytes: 1048576
+    response_bytes: 4194304
+    schema_bytes: 2097152
+    buffer_budget_bytes: 268435456
+    per_principal_rps: 20
+    per_principal_burst: 40
+  lifecycle:
+    startup_timeout: 30s
+    drain_timeout: 45s
+    legacy_session_idle: 15m
+    max_legacy_sessions: 1000
+
+secrets:
+  users_token: {source: env, name: USERS_API_TOKEN}
+  issues_token: {source: file, path: /run/secrets/issues-token}
+  cursor_key: {source: env, name: MCP_CURSOR_SIGNING_KEY}
+
+authentication:
+  corp:
+    kind: oauth_resource_server
+    issuer: "https://identity.example.com/"
+    jwks_uri: "https://identity.example.com/.well-known/jwks.json"
+    algorithms: [RS256]
+    tenant_claim: tenant_id
+    scope_claim: scope
+
+policies:
+  users_reader:
+    tenants: [acme]
+    scopes_all: ["users:read"]
+  issue_reader:
+    tenants: [acme]
+    scopes_all: ["issues:read"]
+  local_reader:
+    tenants: [acme]
+    subjects: [engineering-agent]
+    scopes_all: ["local:read"]
+
+upstreams:
+  users_api:
+    kind: rest
+    required: true
+    endpoints:
+      - id: users-a
+        url: "https://users.internal.example/api/v1"
+        weight: 1
+    network:
+      allowed_hosts: [users.internal.example]
+      allowed_cidrs: ["10.20.0.0/16"]
+    auth: {kind: bearer, secret: users_token}
+    openapi:
+      file: ../testdata/openapi/users.openapi.yaml
+      external_refs: deny
+    execution:
+      timeout: 15s
+      max_inflight: 32
+      max_attempts: 1
+
+  issues_mcp:
+    kind: mcp_http
+    required: true
+    endpoints:
+      - id: issues-a
+        url: "https://issues-mcp.example.com/mcp"
+        weight: 1
+    network:
+      allowed_hosts: [issues-mcp.example.com]
+      allowed_cidrs: public_only
+    auth: {kind: bearer, secret: issues_token}
+    protocol:
+      versions: ["2026-07-28", "2025-11-25"]
+      detect: discover_first
+    discovery:
+      refresh_interval: 60s
+      max_stale: 5m
+    isolation: per_principal
+    state_model: request_scoped
+    execution:
+      timeout: 20s
+      max_inflight: 16
+      max_attempts: 1
+
+  local_mcp:
+    kind: mcp_stdio
+    required: false
+    process:
+      executable: /opt/mcpgate/bin/local-mcp
+      args: ["--root", "/workspace/public-docs"]
+      cwd: /workspace/public-docs
+      env: {LANG: "C.UTF-8"}
+      max_processes: 4
+      max_frame_bytes: 4194304
+    protocol:
+      versions: ["2026-07-28", "2025-11-25"]
+      detect: discover_first
+    discovery:
+      refresh_interval: 60s
+      max_stale: 5m
+    isolation: per_principal
+    state_model: request_scoped
+    execution:
+      timeout: 10s
+      max_inflight: 1
+      max_attempts: 1
+
+servers:
+  engineering:
+    path: /mcp/engineering
+    resource_uri: "https://mcp.example.com/mcp/engineering"
+    authentication: corp
+    protocols: ["2026-07-28", "2025-11-25"]
+    features:
+      tools: true
+      list_changed: false
+      interactive_bridge: false
+      resources: false
+      prompts: false
+    catalog:
+      page_size: 100
+      ttl_ms: 0
+      cursor_secret: cursor_key
+    exports:
+      - name: users.get_user
+        upstream: users_api
+        native: getUser
+        policy: users_reader
+        service_identity_acknowledged: true
+        behavior: read_only
+      - name: issues.search
+        upstream: issues_mcp
+        native: search_issues
+        policy: issue_reader
+        service_identity_acknowledged: true
+        behavior: read_only
+      - name: local.read_file
+        upstream: local_mcp
+        native: read_file
+        policy: local_reader
+        service_identity_acknowledged: true
+        behavior: read_only
+
+observability:
+  logs: json
+  payload_logging: false
+  metrics: true
+  traces: false
+

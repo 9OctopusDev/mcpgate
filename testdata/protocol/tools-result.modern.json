@@ -1,0 +1,22 @@
+{
+  "jsonrpc": "2.0",
+  "id": "req-1",
+  "result": {
+    "resultType": "complete",
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"ok\":true,\"status\":200,\"data\":{\"id\":\"u_123\",\"display_name\":\"Example User\"}}"
+      }
+    ],
+    "structuredContent": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "id": "u_123",
+        "display_name": "Example User"
+      }
+    }
+  }
+}
+

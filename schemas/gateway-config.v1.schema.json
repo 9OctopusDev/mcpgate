@@ -1,0 +1,304 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mcpgate.dev/schemas/gateway-config.v1.schema.json",
+  "title": "mcpgate v1 configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["api_version", "gateway", "secrets", "authentication", "policies", "upstreams", "servers", "observability"],
+  "properties": {
+    "api_version": {"const": "mcpgate/v1"},
+    "gateway": {"$ref": "#/$defs/gateway"},
+    "secrets": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/secret"}},
+    "authentication": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/authentication"}},
+    "policies": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/policy"}},
+    "upstreams": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/upstream"}},
+    "servers": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/server"}},
+    "observability": {"$ref": "#/$defs/observability"}
+  },
+  "$defs": {
+    "duration": {"type": "string", "pattern": "^[1-9][0-9]*(ns|us|µs|ms|s|m|h)$"},
+    "positiveInteger": {"type": "integer", "minimum": 1},
+    "stringList": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "gateway": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "data", "admin", "limits", "lifecycle"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "data": {"$ref": "#/$defs/dataListener"},
+        "admin": {"$ref": "#/$defs/adminListener"},
+        "limits": {"$ref": "#/$defs/limits"},
+        "lifecycle": {"$ref": "#/$defs/lifecycle"}
+      }
+    },
+    "dataListener": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["listen", "allowed_hosts", "allowed_origins", "allow_missing_origin"],
+      "properties": {
+        "listen": {"type": "string", "minLength": 1},
+        "allowed_hosts": {"$ref": "#/$defs/stringList"},
+        "allowed_origins": {"$ref": "#/$defs/stringList"},
+        "allow_missing_origin": {"type": "boolean"}
+      }
+    },
+    "adminListener": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["listen"],
+      "properties": {"listen": {"type": "string", "minLength": 1}}
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_inflight", "max_queued", "queue_timeout", "call_timeout", "request_bytes", "response_bytes", "schema_bytes", "buffer_budget_bytes", "per_principal_rps", "per_principal_burst"],
+      "properties": {
+        "max_inflight": {"$ref": "#/$defs/positiveInteger"},
+        "max_queued": {"type": "integer", "minimum": 0},
+        "queue_timeout": {"$ref": "#/$defs/duration"},
+        "call_timeout": {"$ref": "#/$defs/duration"},
+        "request_bytes": {"$ref": "#/$defs/positiveInteger"},
+        "response_bytes": {"$ref": "#/$defs/positiveInteger"},
+        "schema_bytes": {"$ref": "#/$defs/positiveInteger"},
+        "buffer_budget_bytes": {"$ref": "#/$defs/positiveInteger"},
+        "per_principal_rps": {"$ref": "#/$defs/positiveInteger"},
+        "per_principal_burst": {"$ref": "#/$defs/positiveInteger"}
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["startup_timeout", "drain_timeout", "legacy_session_idle", "max_legacy_sessions"],
+      "properties": {
+        "startup_timeout": {"$ref": "#/$defs/duration"},
+        "drain_timeout": {"$ref": "#/$defs/duration"},
+        "legacy_session_idle": {"$ref": "#/$defs/duration"},
+        "max_legacy_sessions": {"$ref": "#/$defs/positiveInteger"}
+      }
+    },
+    "secret": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source", "name"],
+          "properties": {"source": {"const": "env"}, "name": {"type": "string", "minLength": 1}}
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source", "path"],
+          "properties": {"source": {"const": "file"}, "path": {"type": "string", "minLength": 1}}
+        }
+      ]
+    },
+    "authentication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "issuer", "jwks_uri", "algorithms", "tenant_claim", "scope_claim"],
+      "properties": {
+        "kind": {"const": "oauth_resource_server"},
+        "issuer": {"type": "string", "format": "uri"},
+        "jwks_uri": {"type": "string", "format": "uri"},
+        "algorithms": {"$ref": "#/$defs/stringList"},
+        "tenant_claim": {"type": "string", "minLength": 1},
+        "scope_claim": {"type": "string", "minLength": 1}
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tenants": {"$ref": "#/$defs/stringList"},
+        "subjects": {"$ref": "#/$defs/stringList"},
+        "scopes_all": {"$ref": "#/$defs/stringList"}
+      },
+      "minProperties": 1
+    },
+    "endpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "url", "weight"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "url": {"type": "string", "format": "uri"},
+        "weight": {"$ref": "#/$defs/positiveInteger"}
+      }
+    },
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_hosts", "allowed_cidrs"],
+      "properties": {
+        "allowed_hosts": {"$ref": "#/$defs/stringList"},
+        "allowed_cidrs": {
+          "oneOf": [
+            {"const": "public_only"},
+            {"$ref": "#/$defs/stringList"}
+          ]
+        }
+      }
+    },
+    "upstreamAuth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "secret"],
+      "properties": {"kind": {"const": "bearer"}, "secret": {"type": "string", "minLength": 1}}
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["timeout", "max_inflight", "max_attempts"],
+      "properties": {
+        "timeout": {"$ref": "#/$defs/duration"},
+        "max_inflight": {"$ref": "#/$defs/positiveInteger"},
+        "max_attempts": {"$ref": "#/$defs/positiveInteger"}
+      }
+    },
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["versions", "detect"],
+      "properties": {
+        "versions": {"type": "array", "items": {"enum": ["2026-07-28", "2025-11-25"]}, "minItems": 1, "uniqueItems": true},
+        "detect": {"const": "discover_first"}
+      }
+    },
+    "discovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["refresh_interval", "max_stale"],
+      "properties": {"refresh_interval": {"$ref": "#/$defs/duration"}, "max_stale": {"$ref": "#/$defs/duration"}}
+    },
+    "process": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["executable", "args", "cwd", "env", "max_processes", "max_frame_bytes"],
+      "properties": {
+        "executable": {"type": "string", "pattern": "^/"},
+        "args": {"type": "array", "items": {"type": "string"}},
+        "cwd": {"type": "string", "pattern": "^/"},
+        "env": {"type": "object", "additionalProperties": {"type": "string"}},
+        "max_processes": {"$ref": "#/$defs/positiveInteger"},
+        "max_frame_bytes": {"$ref": "#/$defs/positiveInteger"}
+      }
+    },
+    "upstream": {
+      "oneOf": [
+        {"$ref": "#/$defs/restUpstream"},
+        {"$ref": "#/$defs/httpMCPUpstream"},
+        {"$ref": "#/$defs/stdioMCPUpstream"}
+      ]
+    },
+    "restUpstream": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "required", "endpoints", "network", "auth", "openapi", "execution"],
+      "properties": {
+        "kind": {"const": "rest"},
+        "required": {"type": "boolean"},
+        "endpoints": {"type": "array", "items": {"$ref": "#/$defs/endpoint"}, "minItems": 1},
+        "network": {"$ref": "#/$defs/network"},
+        "auth": {"$ref": "#/$defs/upstreamAuth"},
+        "openapi": {
+          "type": "object", "additionalProperties": false, "required": ["file", "external_refs"],
+          "properties": {"file": {"type": "string", "minLength": 1}, "external_refs": {"const": "deny"}}
+        },
+        "execution": {"$ref": "#/$defs/execution"}
+      }
+    },
+    "httpMCPUpstream": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "required", "endpoints", "network", "auth", "protocol", "discovery", "isolation", "state_model", "execution"],
+      "properties": {
+        "kind": {"const": "mcp_http"},
+        "required": {"type": "boolean"},
+        "endpoints": {"type": "array", "items": {"$ref": "#/$defs/endpoint"}, "minItems": 1},
+        "network": {"$ref": "#/$defs/network"},
+        "auth": {"$ref": "#/$defs/upstreamAuth"},
+        "protocol": {"$ref": "#/$defs/protocol"},
+        "discovery": {"$ref": "#/$defs/discovery"},
+        "isolation": {"enum": ["per_principal", "service_shared"]},
+        "state_model": {"enum": ["request_scoped", "implicit_session"]},
+        "execution": {"$ref": "#/$defs/execution"}
+      }
+    },
+    "stdioMCPUpstream": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "required", "process", "protocol", "discovery", "isolation", "state_model", "execution"],
+      "properties": {
+        "kind": {"const": "mcp_stdio"},
+        "required": {"type": "boolean"},
+        "process": {"$ref": "#/$defs/process"},
+        "protocol": {"$ref": "#/$defs/protocol"},
+        "discovery": {"$ref": "#/$defs/discovery"},
+        "isolation": {"enum": ["per_principal", "service_shared"]},
+        "state_model": {"enum": ["request_scoped", "implicit_session"]},
+        "execution": {"$ref": "#/$defs/execution"}
+      }
+    },
+    "server": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "resource_uri", "authentication", "protocols", "features", "catalog", "exports"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "resource_uri": {"type": "string", "format": "uri"},
+        "authentication": {"type": "string", "minLength": 1},
+        "protocols": {"type": "array", "items": {"enum": ["2026-07-28", "2025-11-25"]}, "minItems": 1, "uniqueItems": true},
+        "features": {"$ref": "#/$defs/features"},
+        "catalog": {"$ref": "#/$defs/catalog"},
+        "exports": {"type": "array", "items": {"$ref": "#/$defs/export"}, "minItems": 1}
+      }
+    },
+    "features": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tools", "list_changed", "interactive_bridge", "resources", "prompts"],
+      "properties": {
+        "tools": {"const": true},
+        "list_changed": {"const": false},
+        "interactive_bridge": {"const": false},
+        "resources": {"const": false},
+        "prompts": {"const": false}
+      }
+    },
+    "catalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["page_size", "ttl_ms", "cursor_secret"],
+      "properties": {
+        "page_size": {"$ref": "#/$defs/positiveInteger"},
+        "ttl_ms": {"const": 0},
+        "cursor_secret": {"type": "string", "minLength": 1}
+      }
+    },
+    "export": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "upstream", "native", "policy", "service_identity_acknowledged", "behavior"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "upstream": {"type": "string", "minLength": 1},
+        "native": {"type": "string", "minLength": 1},
+        "policy": {"type": "string", "minLength": 1},
+        "service_identity_acknowledged": {"const": true},
+        "behavior": {"enum": ["read_only", "mutating", "unknown"]}
+      }
+    },
+    "observability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["logs", "payload_logging", "metrics", "traces"],
+      "properties": {
+        "logs": {"const": "json"},
+        "payload_logging": {"const": false},
+        "metrics": {"type": "boolean"},
+        "traces": {"type": "boolean"}
+      }
+    }
+  }
+}
+

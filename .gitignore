@@ -1,8 +1,8 @@
 .worktrees/
 .superpowers/
+.tools/
 artifacts/
 bin/
 coverage/
 *.test
 *.out
-
