@@ -23,6 +23,7 @@ func NewTransportWithDependencies(policy NetworkPolicy, resolver Resolver, diale
 	}
 	return &http.Transport{
 		Proxy:                 nil,
+		DisableCompression:    true,
 		DialContext:           controlled.DialContext,
 		TLSClientConfig:       &tls.Config{MinVersion: tls.VersionTLS12, ServerName: controlled.policy.serverName},
 		ForceAttemptHTTP2:     true,
