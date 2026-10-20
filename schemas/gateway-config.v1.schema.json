@@ -51,7 +51,6 @@
     "limits": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["max_inflight", "max_queued", "queue_timeout", "call_timeout", "request_bytes", "response_bytes", "schema_bytes", "buffer_budget_bytes", "per_principal_rps", "per_principal_burst"],
       "properties": {
         "max_inflight": {"$ref": "#/$defs/positiveInteger"},
         "max_queued": {"type": "integer", "minimum": 0},
@@ -68,7 +67,6 @@
     "lifecycle": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["startup_timeout", "drain_timeout", "legacy_session_idle", "max_legacy_sessions"],
       "properties": {
         "startup_timeout": {"$ref": "#/$defs/duration"},
         "drain_timeout": {"$ref": "#/$defs/duration"},
@@ -301,4 +299,3 @@
     }
   }
 }
-
