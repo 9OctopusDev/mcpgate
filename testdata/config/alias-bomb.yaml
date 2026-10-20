@@ -1,0 +1,3 @@
+base: &base [one, two, three]
+copies: [*base, *base, *base, *base, *base]
+

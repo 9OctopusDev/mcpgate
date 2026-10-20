@@ -1,0 +1,17 @@
+openapi: 3.1.0
+info: {title: Security, version: v1}
+components:
+  securitySchemes:
+    oauth: {type: oauth2, flows: {clientCredentials: {tokenUrl: "https://issuer.example/token", scopes: {read: read}}}}
+    apiKey: {type: apiKey, in: header, name: X-API-Key}
+paths:
+  /both:
+    get:
+      operationId: both
+      security: [{oauth: [read], apiKey: []}]
+      responses: {"200": {description: ok}}
+  /either:
+    get:
+      operationId: either
+      security: [{apiKey: []}, {oauth: [read]}]
+      responses: {"200": {description: ok}}

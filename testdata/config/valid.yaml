@@ -1,0 +1,72 @@
+api_version: mcpgate/v1
+gateway:
+  name: test-gateway
+  data:
+    listen: "127.0.0.1:8080"
+    allowed_hosts: ["localhost:8080"]
+    allowed_origins: []
+    allow_missing_origin: true
+  admin: {listen: "127.0.0.1:9090"}
+  limits:
+    max_inflight: 256
+    max_queued: 64
+    queue_timeout: 250ms
+    call_timeout: 30s
+    request_bytes: 1048576
+    response_bytes: 4194304
+    schema_bytes: 2097152
+    buffer_budget_bytes: 268435456
+    per_principal_rps: 20
+    per_principal_burst: 40
+  lifecycle:
+    startup_timeout: 30s
+    drain_timeout: 45s
+    legacy_session_idle: 15m
+    max_legacy_sessions: 1000
+secrets:
+  token: {source: env, name: TEST_TOKEN}
+  cursor: {source: env, name: TEST_CURSOR_KEY}
+authentication:
+  test:
+    kind: oauth_resource_server
+    issuer: "https://identity.example.test/"
+    jwks_uri: "https://identity.example.test/jwks"
+    algorithms: [RS256]
+    tenant_claim: tenant_id
+    scope_claim: scope
+policies:
+  reader: {tenants: [test], scopes_all: ["users:read"]}
+upstreams:
+  users:
+    kind: rest
+    required: true
+    endpoints:
+      - {id: users-a, url: "https://users.example.test/api/v1", weight: 1}
+    network:
+      allowed_hosts: [users.example.test]
+      allowed_cidrs: public_only
+    auth: {kind: bearer, secret: token}
+    openapi: {file: ../openapi/users.openapi.yaml, external_refs: deny}
+    execution: {timeout: 15s, max_inflight: 32, max_attempts: 1}
+servers:
+  test:
+    path: /mcp/test
+    resource_uri: "https://mcp.example.test/mcp/test"
+    authentication: test
+    protocols: ["2026-07-28", "2025-11-25"]
+    features:
+      tools: true
+      list_changed: false
+      interactive_bridge: false
+      resources: false
+      prompts: false
+    catalog: {page_size: 100, ttl_ms: 0, cursor_secret: cursor}
+    exports:
+      - name: users.get_user
+        upstream: users
+        native: getUser
+        policy: reader
+        service_identity_acknowledged: true
+        behavior: read_only
+observability: {logs: json, payload_logging: false, metrics: true, traces: false}
+

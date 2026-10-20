@@ -1,0 +1,18 @@
+openapi: 3.0.3
+info: {title: Nullable, version: v1}
+paths:
+  /items:
+    post:
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                score: {type: number, nullable: true, minimum: 0, exclusiveMinimum: true}
+                output_only: {type: string, readOnly: true}
+              required: [score, output_only]
+      responses:
+        "200": {description: ok}

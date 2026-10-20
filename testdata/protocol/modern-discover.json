@@ -1,0 +1,1 @@
+{"jsonrpc":"2.0","id":"discover-1","method":"server/discover","params":{"clientInfo":{"name":"mcpgate","version":"v1"},"capabilities":{}}}
