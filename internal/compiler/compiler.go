@@ -74,6 +74,7 @@ func Compile(ctx context.Context, inputs Inputs) (*gatewayruntime.Generation, []
 	revision := computeRevision(inputs, routes)
 	return gatewayruntime.NewGeneration(gatewayruntime.GenerationSpec{
 		Revision: revision, Routes: routes, Servers: servers, DrainTimeout: inputs.Document.Gateway.Lifecycle.DrainTimeout.Duration,
+		Resources: append([]*gatewayruntime.SharedResource(nil), inputs.Resources...),
 	}), nil
 }
 

@@ -121,11 +121,14 @@ func runServeCommand(ctx context.Context, args []string, _ io.Writer, stderr io.
 		fmt.Fprintln(stderr, "serve requires --config")
 		return 2
 	}
-	_, report := validateDocument(ctx, *path, true)
-	if !report.Valid {
-		fmt.Fprintln(stderr, "configuration validation failed")
+	runtime, err := newConfiguredRuntime(*path)
+	if err != nil {
+		fmt.Fprintln(stderr, err)
 		return 1
 	}
-	fmt.Fprintln(stderr, "online runtime dependencies are unavailable")
-	return 1
+	if err := Serve(ctx, runtime.coordinator); err != nil {
+		fmt.Fprintln(stderr, err)
+		return 1
+	}
+	return 0
 }

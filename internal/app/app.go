@@ -11,7 +11,7 @@ import (
 
 func Run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 	if len(args) == 0 {
-		fmt.Fprintln(stderr, "usage: mcpgate <validate|inspect|serve|version>")
+		fmt.Fprintln(stderr, "usage: mcpgate <validate|inspect|serve|healthcheck|version>")
 		return 2
 	}
 
@@ -24,6 +24,8 @@ func Run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 		return runInspect(ctx, args[1:], stdout, stderr)
 	case "serve":
 		return runServeCommand(ctx, args[1:], stdout, stderr)
+	case "healthcheck":
+		return runHealthcheck(ctx, args[1:], stderr)
 	default:
 		fmt.Fprintf(stderr, "unknown command %q\n", args[0])
 		return 2

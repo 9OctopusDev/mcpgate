@@ -3,9 +3,15 @@ package app
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
+	"net"
+	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestRunVersionJSONReportsBuildAndCompatibility(t *testing.T) {
@@ -68,4 +74,90 @@ func TestRunValidateAndInspectExample(t *testing.T) {
 	if !strings.Contains(stderr.String(), "--config") {
 		t.Fatalf("serve stderr=%q", stderr.String())
 	}
+}
+
+func TestRunServeStartsConfiguredListenersAndStopsWithContext(t *testing.T) {
+	dataAddress := unusedLoopbackAddress(t)
+	adminAddress := unusedLoopbackAddress(t)
+	directory := t.TempDir()
+	configDirectory := filepath.Join(directory, "config")
+	openAPIDirectory := filepath.Join(directory, "openapi")
+	if err := os.MkdirAll(configDirectory, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(openAPIDirectory, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	openAPI, err := os.ReadFile("../../testdata/openapi/users.openapi.yaml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(openAPIDirectory, "users.openapi.yaml"), openAPI, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	configuration, err := os.ReadFile("../../testdata/config/valid.yaml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	configured := strings.ReplaceAll(string(configuration), "127.0.0.1:8080", dataAddress)
+	configured = strings.ReplaceAll(configured, "localhost:8080", dataAddress)
+	configured = strings.ReplaceAll(configured, "127.0.0.1:9090", adminAddress)
+	path := filepath.Join(configDirectory, "gateway.yaml")
+	if err := os.WriteFile(path, []byte(configured), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("TEST_TOKEN", "upstream-test-token")
+	t.Setenv("TEST_CURSOR_KEY", base64.StdEncoding.EncodeToString(bytes.Repeat([]byte{0x42}, 32)))
+	if _, report := validateDocument(context.Background(), path, true); !report.Valid {
+		t.Fatalf("test configuration is invalid: %+v", report.Diagnostics)
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	result := make(chan int, 1)
+	var stdout, stderr bytes.Buffer
+	go func() { result <- Run(ctx, []string{"serve", "--config", path}, &stdout, &stderr) }()
+
+	readyURL := "http://" + adminAddress + "/readyz"
+	deadline := time.Now().Add(3 * time.Second)
+	for {
+		response, requestErr := http.Get(readyURL)
+		if requestErr == nil {
+			_ = response.Body.Close()
+			if response.StatusCode == http.StatusOK {
+				break
+			}
+		}
+		select {
+		case code := <-result:
+			t.Fatalf("serve exited before readiness with code %d: %s", code, stderr.String())
+		default:
+		}
+		if time.Now().After(deadline) {
+			t.Fatalf("admin readiness was not served: %s", stderr.String())
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
+
+	cancel()
+	select {
+	case code := <-result:
+		if code != 0 {
+			t.Fatalf("serve shutdown code = %d: %s", code, stderr.String())
+		}
+	case <-time.After(3 * time.Second):
+		t.Fatal("serve did not stop after context cancellation")
+	}
+}
+
+func unusedLoopbackAddress(t *testing.T) string {
+	t.Helper()
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	address := listener.Addr().String()
+	if err := listener.Close(); err != nil {
+		t.Fatal(err)
+	}
+	return address
 }

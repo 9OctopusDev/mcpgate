@@ -1,0 +1,9 @@
+.git
+.github
+.tools
+.superpowers
+artifacts
+docs/superpowers
+**/*_test.go
+**/testdata
+*.log
