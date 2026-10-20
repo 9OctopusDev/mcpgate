@@ -1,0 +1,17 @@
+openapi: 3.1.0
+info: {title: Recursive, version: v1}
+components:
+  schemas:
+    Node:
+      type: object
+      properties:
+        child: {$ref: "#/components/schemas/Node"}
+paths:
+  /nodes:
+    post:
+      operationId: recursive
+      requestBody:
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/Node"}
+      responses: {"200": {description: ok}}

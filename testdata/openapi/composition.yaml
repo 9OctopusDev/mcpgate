@@ -1,0 +1,17 @@
+openapi: 3.1.0
+info: {title: Composition, version: v1}
+paths:
+  /compose:
+    post:
+      operationId: compose
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - {type: object, properties: {base: {type: string}}}
+                - oneOf:
+                    - {type: object, properties: {a: {type: string}}}
+                    - {type: object, properties: {b: {type: integer}}}
+      responses:
+        "200": {description: ok}

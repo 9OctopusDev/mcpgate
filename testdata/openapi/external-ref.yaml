@@ -1,0 +1,12 @@
+openapi: 3.1.0
+info: {title: External, version: v1}
+paths:
+  /external:
+    post:
+      operationId: external
+      requestBody:
+        content:
+          application/json:
+            schema: {$ref: "https://attacker.invalid/schema.json"}
+      responses:
+        "200": {description: ok}
