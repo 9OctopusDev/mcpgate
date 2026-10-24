@@ -20,7 +20,7 @@ Read the [technical design](docs/design/universal-mcp-gateway.md), [security bou
 
 ## Build and test locally
 
-Install Go 1.27.3 and Docker, then clone the canonical repository:
+Install Go 1.27.3, Make, and Docker, then clone the canonical repository:
 
 ```sh
 git clone https://github.com/9OctopusDev/mcpgate.git

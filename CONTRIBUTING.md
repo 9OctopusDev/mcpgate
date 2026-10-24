@@ -4,7 +4,7 @@ Thanks for helping improve mcpgate. Before starting substantial work, open an is
 
 ## Development setup
 
-Install Go 1.27.3 and Docker, then clone the canonical repository:
+Install Go 1.27.3, Make, and Docker, then clone the canonical repository:
 
 ```sh
 git clone https://github.com/9OctopusDev/mcpgate.git
