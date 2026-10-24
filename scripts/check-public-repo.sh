@@ -36,7 +36,10 @@ done
 grep -Fq 'Apache-2.0' README.md || fail 'README does not identify the project license'
 grep -Fq 'github.com/9OctopusDev/mcpgate' README.md || fail 'README does not use the canonical repository path'
 
-if grep -REn 'uses:[[:space:]]+[^[:space:]]+@v[0-9]+' .github/workflows; then
+action_uses=$(grep -REn 'uses:[[:space:]]+[^[:space:]]+@' .github/workflows || true)
+unpinned_actions=$(printf '%s\n' "$action_uses" | grep -Ev '@[0-9a-f]{40}([[:space:]#]|$)' || true)
+if [ -n "$unpinned_actions" ]; then
+  printf '%s\n' "$unpinned_actions" >&2
   fail 'GitHub Actions must be pinned to immutable commit SHAs'
 fi
 
