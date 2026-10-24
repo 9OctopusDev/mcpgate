@@ -1,0 +1,65 @@
+name: Bug report
+description: Report reproducible incorrect behavior in mcpgate
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Before continuing, remove credentials, tokens, private endpoints, customer data, and payloads. Security vulnerabilities must use private vulnerability reporting.
+  - type: input
+    id: revision
+    attributes:
+      label: Version or commit
+      description: Provide the tag or full commit SHA where the problem occurs.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Configuration and validation
+        - MCP protocol compatibility
+        - REST upstream adapter
+        - Remote MCP upstream adapter
+        - Stdio MCP upstream adapter
+        - Authentication and policy
+        - Runtime and operations
+        - Documentation
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Give the smallest sanitized configuration and exact commands needed to reproduce the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include OS, architecture, Go or container version, and relevant deployment topology.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Safety checks
+      options:
+        - label: I removed secrets, sensitive payloads, and private infrastructure details.
+          required: true
+        - label: This is not a privately reportable security vulnerability.
+          required: true
