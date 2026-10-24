@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mcpgate/mcpgate/internal/contracts"
-	"github.com/mcpgate/mcpgate/internal/executor"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/executor"
 )
 
 type executorFunc func(context.Context, executor.Request, contracts.EventSink) (contracts.Outcome, error)

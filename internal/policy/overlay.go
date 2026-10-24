@@ -1,6 +1,6 @@
 package policy
 
-import "github.com/mcpgate/mcpgate/internal/contracts"
+import "github.com/9OctopusDev/mcpgate/internal/contracts"
 
 type Overlay struct {
 	Principals []string

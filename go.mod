@@ -1,4 +1,4 @@
-module github.com/mcpgate/mcpgate
+module github.com/9OctopusDev/mcpgate
 
 go 1.27.3
 

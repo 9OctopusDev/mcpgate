@@ -8,14 +8,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mcpgate/mcpgate/internal/adapters/rest"
-	"github.com/mcpgate/mcpgate/internal/config"
-	"github.com/mcpgate/mcpgate/internal/contracts"
-	"github.com/mcpgate/mcpgate/internal/edge"
-	"github.com/mcpgate/mcpgate/internal/executor"
-	"github.com/mcpgate/mcpgate/internal/policy"
-	"github.com/mcpgate/mcpgate/internal/protocol/modern"
-	"github.com/mcpgate/mcpgate/internal/testkit"
+	"github.com/9OctopusDev/mcpgate/internal/adapters/rest"
+	"github.com/9OctopusDev/mcpgate/internal/config"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/edge"
+	"github.com/9OctopusDev/mcpgate/internal/executor"
+	"github.com/9OctopusDev/mcpgate/internal/policy"
+	"github.com/9OctopusDev/mcpgate/internal/protocol/modern"
+	"github.com/9OctopusDev/mcpgate/internal/testkit"
 )
 
 type integrationVerifier struct{}

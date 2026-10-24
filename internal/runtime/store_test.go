@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mcpgate/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
 )
 
 func testGeneration(revision string, drain time.Duration, resources ...*SharedResource) *Generation {

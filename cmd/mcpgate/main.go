@@ -4,7 +4,7 @@ import (
 	"context"
 	"os"
 
-	"github.com/mcpgate/mcpgate/internal/app"
+	"github.com/9OctopusDev/mcpgate/internal/app"
 )
 
 func main() {

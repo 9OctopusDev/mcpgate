@@ -10,8 +10,8 @@ import (
 	"sort"
 	"time"
 
-	"github.com/mcpgate/mcpgate/internal/catalog"
-	"github.com/mcpgate/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/catalog"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
 )
 
 type DiscoveryResult struct {

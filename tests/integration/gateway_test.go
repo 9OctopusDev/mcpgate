@@ -8,8 +8,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/mcpgate/mcpgate/internal/contracts"
-	"github.com/mcpgate/mcpgate/internal/edge"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/edge"
 )
 
 type countingVerifier struct{ calls atomic.Int64 }

@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/mcpgate/mcpgate/internal/contracts"
-	"github.com/mcpgate/mcpgate/internal/testkit"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/testkit"
 )
 
 type bearerCredential struct{ token string }

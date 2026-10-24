@@ -3,7 +3,7 @@ package rest
 import (
 	"encoding/json"
 
-	"github.com/mcpgate/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
 )
 
 type successEnvelope struct {

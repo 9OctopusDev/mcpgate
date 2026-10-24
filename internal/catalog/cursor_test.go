@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mcpgate/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
 )
 
 func firstCursor(t *testing.T) (ListRequest, string) {

@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	gatewayruntime "github.com/mcpgate/mcpgate/internal/runtime"
+	gatewayruntime "github.com/9OctopusDev/mcpgate/internal/runtime"
 )
 
 func Serve(ctx context.Context, coordinator *gatewayruntime.Coordinator) error {

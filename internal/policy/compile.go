@@ -3,7 +3,7 @@ package policy
 import (
 	"fmt"
 
-	"github.com/mcpgate/mcpgate/internal/config"
+	"github.com/9OctopusDev/mcpgate/internal/config"
 )
 
 type compiledPolicy struct {

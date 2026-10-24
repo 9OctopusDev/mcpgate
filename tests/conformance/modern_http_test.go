@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/mcpgate/mcpgate/internal/protocol/modern"
+	"github.com/9OctopusDev/mcpgate/internal/protocol/modern"
 )
 
 func TestModernHTTPDiscoveryGolden(t *testing.T) {

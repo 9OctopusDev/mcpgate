@@ -14,7 +14,7 @@ import (
 	"github.com/goccy/go-yaml/ast"
 	"github.com/goccy/go-yaml/parser"
 	"github.com/goccy/go-yaml/token"
-	"github.com/mcpgate/mcpgate/schemas"
+	"github.com/9OctopusDev/mcpgate/schemas"
 	"github.com/santhosh-tekuri/jsonschema/v6"
 )
 

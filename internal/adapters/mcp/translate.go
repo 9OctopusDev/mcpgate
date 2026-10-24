@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/mcpgate/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
 )
 
 func (adapter *Adapter) CallTool(ctx context.Context, call contracts.Call, _ contracts.EventSink) (contracts.Outcome, error) {

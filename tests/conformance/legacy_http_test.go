@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mcpgate/mcpgate/internal/contracts"
-	"github.com/mcpgate/mcpgate/internal/protocol/legacy"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/protocol/legacy"
 )
 
 func TestLegacyHTTPInitializeGolden(t *testing.T) {

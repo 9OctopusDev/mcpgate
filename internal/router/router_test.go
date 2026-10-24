@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/mcpgate/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
 )
 
 type denyAuthorizer struct{ calls int }

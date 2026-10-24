@@ -18,7 +18,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mcpgate/mcpgate/internal/config"
+	"github.com/9OctopusDev/mcpgate/internal/config"
 )
 
 type rotatingKeys struct {

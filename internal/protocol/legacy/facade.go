@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/mcpgate/mcpgate/internal/contracts"
-	"github.com/mcpgate/mcpgate/internal/edge"
-	"github.com/mcpgate/mcpgate/internal/executor"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/edge"
+	"github.com/9OctopusDev/mcpgate/internal/executor"
 )
 
 type Executor interface {

@@ -9,8 +9,8 @@ import (
 	"net/http"
 	"sort"
 
-	"github.com/mcpgate/mcpgate/internal/catalog"
-	"github.com/mcpgate/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/catalog"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
 	"github.com/santhosh-tekuri/jsonschema/v6"
 )
 

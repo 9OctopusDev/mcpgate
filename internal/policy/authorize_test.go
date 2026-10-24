@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/mcpgate/mcpgate/internal/config"
-	"github.com/mcpgate/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/config"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
 )
 
 func policyFixture(t *testing.T) *Engine {

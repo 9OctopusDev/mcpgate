@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mcpgate/mcpgate/internal/supervisor"
+	"github.com/9OctopusDev/mcpgate/internal/supervisor"
 )
 
 func TestStdioHelperProcess(t *testing.T) {

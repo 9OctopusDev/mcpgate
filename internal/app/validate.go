@@ -10,8 +10,8 @@ import (
 	"sort"
 
 	"github.com/goccy/go-yaml"
-	"github.com/mcpgate/mcpgate/internal/adapters/rest"
-	"github.com/mcpgate/mcpgate/internal/config"
+	"github.com/9OctopusDev/mcpgate/internal/adapters/rest"
+	"github.com/9OctopusDev/mcpgate/internal/config"
 )
 
 type validationReport struct {

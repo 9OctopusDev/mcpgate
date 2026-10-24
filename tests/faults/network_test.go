@@ -6,7 +6,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/mcpgate/mcpgate/internal/upstream"
+	"github.com/9OctopusDev/mcpgate/internal/upstream"
 )
 
 type faultResolver struct{ addresses []net.IPAddr }
