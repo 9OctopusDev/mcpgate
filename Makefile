@@ -1,6 +1,6 @@
 GO ?= go
 
-.PHONY: build test race vet conformance fuzz-seeds release-gate container
+.PHONY: build test race vet conformance fuzz-seeds public-check release-gate container
 
 build:
 	$(GO) build ./cmd/mcpgate
@@ -20,6 +20,9 @@ conformance:
 
 fuzz-seeds:
 	$(GO) test ./internal/config ./internal/catalog ./internal/adapters/rest ./internal/protocol/modern -run '^Fuzz' -count=1
+
+public-check:
+	bash scripts/check-public-repo.sh
 
 release-gate: test race conformance vet fuzz-seeds
 	$(GO) test ./tests/faults -count=1

@@ -36,4 +36,13 @@ done
 grep -Fq 'Apache-2.0' README.md || fail 'README does not identify the project license'
 grep -Fq 'github.com/9OctopusDev/mcpgate' README.md || fail 'README does not use the canonical repository path'
 
+if grep -REn 'uses:[[:space:]]+[^[:space:]]+@v[0-9]+' .github/workflows; then
+  fail 'GitHub Actions must be pinned to immutable commit SHAs'
+fi
+
+[ -f .github/workflows/dependency-review.yml ] || fail 'dependency review workflow is missing'
+[ -f .github/dependabot.yml ] || fail 'Dependabot configuration is missing'
+grep -Fq 'timeout-minutes:' .github/workflows/ci.yml || fail 'CI job timeout is missing'
+grep -Fq 'scripts/check-public-repo.sh' .github/workflows/ci.yml || fail 'CI does not enforce public-repository readiness'
+
 printf 'public-repository check passed\n'
