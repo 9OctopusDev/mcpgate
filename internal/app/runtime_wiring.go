@@ -16,7 +16,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/goccy/go-yaml"
 	"github.com/9OctopusDev/mcpgate/internal/adapters/mcp"
 	"github.com/9OctopusDev/mcpgate/internal/adapters/rest"
 	"github.com/9OctopusDev/mcpgate/internal/admin"
@@ -35,6 +34,7 @@ import (
 	"github.com/9OctopusDev/mcpgate/internal/supervisor"
 	"github.com/9OctopusDev/mcpgate/internal/telemetry"
 	"github.com/9OctopusDev/mcpgate/internal/upstream"
+	"github.com/goccy/go-yaml"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )

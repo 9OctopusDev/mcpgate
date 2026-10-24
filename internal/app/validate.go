@@ -9,9 +9,9 @@ import (
 	"path/filepath"
 	"sort"
 
-	"github.com/goccy/go-yaml"
 	"github.com/9OctopusDev/mcpgate/internal/adapters/rest"
 	"github.com/9OctopusDev/mcpgate/internal/config"
+	"github.com/goccy/go-yaml"
 )
 
 type validationReport struct {
