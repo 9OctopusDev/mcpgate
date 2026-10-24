@@ -4,8 +4,6 @@ go 1.27.3
 
 require (
 	github.com/goccy/go-yaml v1.19.2
-	github.com/lestrrat-go/jwx/v4 v4.1.0
-	github.com/modelcontextprotocol/go-sdk v1.8.0
 	github.com/pb33f/libopenapi v0.41.6
 	github.com/prometheus/client_golang v1.24.1
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.3
