@@ -4,9 +4,9 @@ import (
 	"context"
 	"sort"
 
-	"github.com/mcpgate/mcpgate/internal/config"
-	"github.com/mcpgate/mcpgate/internal/contracts"
-	gatewayruntime "github.com/mcpgate/mcpgate/internal/runtime"
+	"github.com/9OctopusDev/mcpgate/internal/config"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
+	gatewayruntime "github.com/9OctopusDev/mcpgate/internal/runtime"
 )
 
 func Compile(ctx context.Context, inputs Inputs) (*gatewayruntime.Generation, []config.Diagnostic) {

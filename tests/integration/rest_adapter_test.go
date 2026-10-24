@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/mcpgate/mcpgate/internal/adapters/rest"
-	"github.com/mcpgate/mcpgate/internal/config"
-	"github.com/mcpgate/mcpgate/internal/contracts"
-	"github.com/mcpgate/mcpgate/internal/credentials"
-	"github.com/mcpgate/mcpgate/internal/testkit"
+	"github.com/9OctopusDev/mcpgate/internal/adapters/rest"
+	"github.com/9OctopusDev/mcpgate/internal/config"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/credentials"
+	"github.com/9OctopusDev/mcpgate/internal/testkit"
 )
 
 func TestRESTAdapterEndToEndPlanCredentialAndResult(t *testing.T) {

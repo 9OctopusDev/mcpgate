@@ -1,9 +1,9 @@
 package compiler
 
 import (
-	"github.com/mcpgate/mcpgate/internal/config"
-	"github.com/mcpgate/mcpgate/internal/contracts"
-	gatewayruntime "github.com/mcpgate/mcpgate/internal/runtime"
+	"github.com/9OctopusDev/mcpgate/internal/config"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
+	gatewayruntime "github.com/9OctopusDev/mcpgate/internal/runtime"
 )
 
 type Inputs struct {

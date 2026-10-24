@@ -9,8 +9,8 @@ import (
 	"sync"
 	"testing"
 
-	adaptermcp "github.com/mcpgate/mcpgate/internal/adapters/mcp"
-	"github.com/mcpgate/mcpgate/internal/contracts"
+	adaptermcp "github.com/9OctopusDev/mcpgate/internal/adapters/mcp"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
 )
 
 type remoteMCPTransport struct {

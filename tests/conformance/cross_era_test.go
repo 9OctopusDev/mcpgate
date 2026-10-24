@@ -3,9 +3,9 @@ package conformance_test
 import (
 	"testing"
 
-	"github.com/mcpgate/mcpgate/internal/contracts"
-	"github.com/mcpgate/mcpgate/internal/protocol/legacy"
-	"github.com/mcpgate/mcpgate/internal/protocol/modern"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/protocol/legacy"
+	"github.com/9OctopusDev/mcpgate/internal/protocol/modern"
 )
 
 func TestCrossEraProtocolFacadesRemainDistinct(t *testing.T) {

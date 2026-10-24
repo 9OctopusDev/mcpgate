@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/mcpgate/mcpgate/internal/config"
+	"github.com/9OctopusDev/mcpgate/internal/config"
 )
 
 func TestCredentialResolveSupportsOnlyEnvAndProtectedFiles(t *testing.T) {

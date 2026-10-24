@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/mcpgate/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
 )
 
 func makePrincipal(key []byte, issuer, subject, tenant, clientID string, scopes []string) contracts.Principal {

@@ -3,7 +3,7 @@ package legacy
 import (
 	"encoding/json"
 
-	"github.com/mcpgate/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
 )
 
 func CompatibleTools(tools []contracts.ToolContract) []contracts.ToolContract {

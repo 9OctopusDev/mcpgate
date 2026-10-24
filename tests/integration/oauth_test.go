@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/mcpgate/mcpgate/internal/identity"
+	"github.com/9OctopusDev/mcpgate/internal/identity"
 )
 
 func TestOAuthMetadataIsScopedPerVirtualServer(t *testing.T) {

@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	gatewayruntime "github.com/mcpgate/mcpgate/internal/runtime"
+	gatewayruntime "github.com/9OctopusDev/mcpgate/internal/runtime"
 )
 
 type lifecycleBuilder struct {

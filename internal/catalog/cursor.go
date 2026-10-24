@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mcpgate/mcpgate/internal/contracts"
+	"github.com/9OctopusDev/mcpgate/internal/contracts"
 )
 
 const (

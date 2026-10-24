@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	gatewayruntime "github.com/mcpgate/mcpgate/internal/runtime"
+	gatewayruntime "github.com/9OctopusDev/mcpgate/internal/runtime"
 )
 
 type provider struct{ status gatewayruntime.Status }
